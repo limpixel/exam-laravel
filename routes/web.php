@@ -5,6 +5,9 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\PortfolioController;
+use App\Http\Controllers\Frontend\ServiceController;
+use App\Http\Controllers\Frontend\BasketController;
+
 
 use App\Http\Controllers\Backend\HomeController as BackendHomeController;
 use App\Http\Controllers\Backend\AboutController as BackendAboutController;
@@ -12,6 +15,9 @@ use App\Http\Controllers\Backend\CVController as BackendCVController;
 use App\Http\Controllers\Backend\ContactController as BackendContactController;
 use App\Http\Controllers\Backend\PortfolioController as BackendPortfolioController;
 use App\Http\Controllers\Backend\ProfileController as BackendProfileController;
+use App\Http\Controllers\Backend\ServiceController as BackendServiceController;
+use App\Http\Controllers\Backend\ItemsController as BackendItemsController;
+use App\Http\Controllers\Backend\CategoriesController as BackendCategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +36,16 @@ Route::get('/about', [AboutController::class, 'index'])->name('frontend.about.in
 Route::get('/about/download/cv', [AboutController::class, 'download_cv'])->name('frontend.about.download.my.cv');
 Route::get('/contact', [ContactController::class, 'index'])->name('frontend.contact.index');
 Route::post('/contact/process', [ContactController::class, 'process'])->name('frontend.contact.process');
+
+Route::get('my/services', [ServiceController::class, 'index'])->name('frontend.service.index');
+Route::get('/basket', [BasketController::class, 'index'])->name('frontend.basket.index');
+Route::post('/add-to-cart', [BasketController::class, 'add_to_cart'])->name('frontend.basket.add');
+
+Route::get('/backend/services', [BackendServiceController::class, 'index'])->name('backend.services.index');
+Route::get('/backend/services/items/', [BackendItemsController::class, 'index'])->name('backend.items.index');
+Route::get('/backend/services/categories', [BackendCategoriesController::class, 'index'])->name('backend.categories.index');
+Route::get('/backend/create/services/categories', [BackendCategoriesController::class, 'create'])->name('backend.create.categories');
+Route::get('/backend/create/services/categories', [BackendCategoriesController::class, 'create'])->name('backend.process.create.categories');
 
 Route::get('/backend/manage/home', [BackendHomeController::class, 'index'])->name('backend.manage.home');
 
