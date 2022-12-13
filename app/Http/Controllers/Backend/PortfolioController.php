@@ -74,46 +74,48 @@ class PortfolioController extends Controller
         }
     }
 
-    public function edit(Portfolio $portfolio) {
-        $data = [
-            'portfolio' => $portfolio,
-        ];
+    public function edit($id = null)
+    {
+        if ($id == null) {
+            return redirect()->route('backend.manage.portfolio')->with('error', 'Item Deleted Success');
+        } else {
+            $portfolio = portfolio::find($id);
 
-        return view('backend.portfolio.edit', $data);
+            if ($portfolio) {
+                return view('backend.portfolio.edit' , compact('portfolio'));
+            } else {
+                return redirect()->route('backend.manage.portfolio')->with('error', "The ID {$id} not found in Database!");
+            }
+            
+        }
+        
     }
 
-    public function edit_process(Request $request, Portfolio $portfolio) {
-        $rule = [
-            'title' => 'required',
-            'image' => 'required|mimes:jpg,jpeg,png',
-            'description' => 'required',
-        ];
-
-        $message = [
-            'title.required' => ' The field <strong>title</strong> is required',
-            'image.required' => ' The field <strong>image</strong> is required',
-            'description.required' => ' The field <strong>description</strong> is required',
-        ];
-
-        $validator = Validator::make($request->all(), $rule, $message);
-
-        if ($validator->fails()) {
-            return redirect()->route('backend.edit.portfolio', $portfolio->id)->withErrors($validator)->withInput();
-        } else {
-        $image = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('images/portfolio'), $image);
-
-        Portfolio::where('id', $portfolio->id)->update([
-            'title' => $request->title,
-            'image' => $image,
-            'description' => $request->description,
+    public function edit_process(Request $request)
+    {
+        request()->validate([
+            'title'         => 'required',
+            'image'         => 'required|max:2048|mimes:jpg,jpeg,png',
+            'description'   => 'required'
         ]);
 
-        return redirect()
-        ->route('backend.manage.portfolio')
-        ->with('success', 'Item created successfully');
-        }
+        $old_image = Portfolio::find($request->id);
+        unlink(public_path('portfolio/'.$old_image->image));
+
+        $image = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('portfolio'), $image);
+
+
+        portfolio::where('id', $request->id)->update(([
+            'title'         => $request->title,
+            'image'         => $image,
+            'description'   => $request->description
+        ]));
+
+        return redirect()->route('backend.manage.portfolio')->with('success', 'Item Edited Successfully');
+
     }
+
 
     public function destroy($id = null)
     {

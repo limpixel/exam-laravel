@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Portfolio | Edit
+    Portfolio | Edit #ID {{ $portfolio->id }} 
 @endsection
 
 @section('javascript')
@@ -39,8 +39,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Update Portfolio | Edit') }}</div>
-
+                <div class="card-header">Portfolio | Edit #ID {{ $portfolio->id }} </div>
                 <div class="card-body">
                     <div class="card-body">
                         @if (Session::has('success'))
@@ -64,7 +63,7 @@
                                         <div class="mb-3">
                                             <div class="mb-2 @error('image') is-invalid fw-bold @enderror">Image</div>
                                             <input type="file" class="form-control @error('image') is-invalid text-danger @enderror" name="image" id="image" value="{{ asset('images/portfolio') .'/'. $portfolio->image }}">
-                                            <img src="{{ asset('images/portfolio') .'/'. $portfolio->image }}" alt="" class="img-thumbnail mt-3 mb-3 w-50" id="preview">
+                                            <img src="{{ asset('images/portfolio') .'/'. $portfolio->image }}" class="img-thumbnail mt-3 mb-3 w-50" id="preview">
                                             @error('image')
                                                 <small class="text-danger">{!! $message !!}</small>
                                             @enderror
@@ -76,7 +75,7 @@
                                                 <div class="text-danger small">{!! $message !!}</div>
                                             @enderror
                                         </div>
-                                            <button class="btn btn-primary">Create</button>
+                                            <button class="btn btn-primary">Edit</button>
                                     </div>
                                 </div>
                             </div>
